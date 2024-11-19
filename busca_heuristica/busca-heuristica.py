@@ -46,10 +46,10 @@ class EstadoQuebraCabeca:
                 vizinhos.append(EstadoQuebraCabeca(novo_tabuleiro, self.movimentos + 1, self))
         return vizinhos
 
-    def __lt__(self, outro):
+    def __lt__(self, outro): # Menor que (usado para ordenar a fila de prioridade)
         return self.prioridade < outro.prioridade
 
-    def __eq__(self, outro):
+    def __eq__(self, outro): # Igualdade (usado para verificar se um estado já foi visitado)
         return self.tabuleiro == outro.tabuleiro
 
     def para_tupla(self):
