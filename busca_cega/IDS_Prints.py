@@ -13,9 +13,9 @@ Estado final do grafo de busca.
 *   Por enquanto, estamos usando um array de arrays do numpy, por eficiência
     *   E também por que não sei como a matrix do numpy se relaciona com outras funções
 '''
-ESTADO_OBJETIVO = np.array([[0, 1, 2],
-                            [3, 4, 5],
-                            [6, 7, 8]])
+ESTADO_OBJETIVO = np.array([[1, 2, 3],
+                            [4, 5, 6],
+                            [7, 8, 0]])
 
 
 def comparar_matrizes(estado_atual, ESTADO_OBJETIVO):
@@ -31,6 +31,7 @@ def comparar_matrizes(estado_atual, ESTADO_OBJETIVO):
             if valor == 0:
                 zero_i = i
                 zero_j = j
+                print(f"====CompMatrix ZeroI: {zero_i} ZeroJ: {zero_j}")
     #Ainda dá pra deixar esse loop for mais eficiente
     
     return flag_diferente, zero_i, zero_j
@@ -66,7 +67,8 @@ def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, o
                 Se retorno == False, é um caminho sem fim.
                 Se retorno == True,  é o node destino!
     '''
-    
+    #time.sleep(1)
+    #print("---------------------++++++ Sleep +++++++--------------------")
     flag_diferente = False  # True se atual e OBJETIVO forem diferentes.
     zero_i = 0              # Posição i de 0 no estado_atual
     zero_j = 0              # Posição j de 0 no estado_atual
@@ -75,9 +77,11 @@ def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, o
     flag_diferente, zero_i, zero_j = comparar_matrizes(estado_atual, ESTADO_OBJETIVO)
         
     if(flag_diferente == False):    # Se sim, retornamos a matriz do estado atual.
+        print("f_D False")
         return [(estado_atual, 0)]  # O segundo item da tupla é o número movido na etapa atual
     
     if (profundidade_limite == 0):  # Se chegamos no limite de profundidade, retornamos
+        print("p_L 0")
         return False
     
     # Adicionamos raiz à fronteira
@@ -93,20 +97,31 @@ def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, o
         lista_fronteira.extend([(1,0), (0,1), (-1,0), (0,-1)])  # Representa os 4 grafos possíveis de se seguir
                                                                     # Baixo, direita, cima, esquerda
         if origem in lista_fronteira[0]:
+            print("Remove origem!") 
+            print(lista_fronteira)
             lista_fronteira.remove(origem)                      # Removemos a possibilidade dessa iteração voltar ao
+            print(lista_fronteira)                                                    #estado anterior
 
         #Agora, vamos iterar por cada um dos novos nodes colocados na lista de fronteira.
         
+        print("============= Pre frontier! listafronteira:")
+        print(lista_fronteira)
         
         for di, dj in lista_fronteira:
+            print(f"didjcomp {di} {dj}")
             if 0 <= (zero_i + di) <= (lado-1) and 0 <= (zero_j + dj) <= (lado-1):     # Checa se o index existe
+                print(f"didjPOScomp {di} {dj}")
                 
                 numero_trocado = estado_atual[zero_i + di][zero_j + dj]
+                print(f"============ NOVA TROCA! \n{estado_atual}")
+                print(f"Num trocado: {numero_trocado}")
+                print(f"Que gera o proximo estado:")
                 
                 proximo_estado = np.copy(estado_atual)
                 proximo_estado[zero_i][zero_j] = numero_trocado
                 proximo_estado[zero_i + di][zero_j + dj] = 0
                 
+                print(proximo_estado)
                 
                 retorno = profundidade_iterativa(proximo_estado, ESTADO_OBJETIVO, profundidade_limite - 1, (-di, -dj))
                 
@@ -121,6 +136,7 @@ def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, o
 def profundidade(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem):
     while(True):
         profundidade_limite += 1
+        print(f"Profundidade limite: { profundidade_limite }")
         retorno = profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem)
         
         if retorno:         # Encontrado o caminho de saída
