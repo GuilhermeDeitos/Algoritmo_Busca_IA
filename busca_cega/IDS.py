@@ -13,9 +13,9 @@ Estado final do grafo de busca.
 *   Por enquanto, estamos usando um array de arrays do numpy, por eficiência
     *   E também por que não sei como a matrix do numpy se relaciona com outras funções
 '''
-ESTADO_OBJETIVO = np.array([[0, 1, 2],
-                            [3, 4, 5],
-                            [6, 7, 8]])
+ESTADO_OBJETIVO = np.array([[1, 2, 3],
+                            [4, 5, 6],
+                            [7, 8, 0]])
 
 
 def comparar_matrizes(estado_atual, ESTADO_OBJETIVO):
@@ -122,7 +122,7 @@ def profundidade(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem):
     while(True):
         profundidade_limite += 1
         retorno = profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem)
-        
+        print(profundidade_limite)
         if retorno:         # Encontrado o caminho de saída
             return retorno
         
@@ -137,15 +137,30 @@ def print_caminho_final(caminho_final):
         print(f"Elemento trocado: {trocado}")
         
 
+def eh_resolvivel(tabuleiro):
+    # Converte o tabuleiro em uma lista unidimensional
+    tabuleiro_unidimensional = [numero for linha in tabuleiro for numero in linha if numero != 0]
+    numero_inversoes = 0
+    for i in range(len(tabuleiro_unidimensional)):
+        for j in range(i + 1, len(tabuleiro_unidimensional)):
+            if tabuleiro_unidimensional[i] > tabuleiro_unidimensional[j]:
+                numero_inversoes += 1
+    return numero_inversoes % 2 == 0
+        
+
 # Ainda não sei se a importação dessas funções vai conflitar com o Flask, então por enquanto vou deixar a execução dos testes somente dentro do escopo de __main__
 if __name__ == '__main__':
     
     lado = ESTADO_OBJETIVO.size
     lado = int(sqrt(lado)) 
-    ESTADO_INICIAL = np.array([[1, 2, 3],
+    ESTADO_INICIAL = np.array([[1, 3, 2],
                                [4, 6, 0],
-                               [7, 5, 8]])
+                               [7, 8, 5]])
     
-    caminho_final = profundidade(ESTADO_INICIAL, ESTADO_OBJETIVO, -1, (0, 0))
-    caminho_final.reverse()
-    print_caminho_final(caminho_final)
+    if(eh_resolvivel(ESTADO_INICIAL)):
+        print("RESOLVIVEL!")
+        caminho_final = profundidade(ESTADO_INICIAL, ESTADO_OBJETIVO, -1, (0, 0))
+        caminho_final.reverse()
+        print_caminho_final(caminho_final)
+    else:
+        print("Não resolvivel!")

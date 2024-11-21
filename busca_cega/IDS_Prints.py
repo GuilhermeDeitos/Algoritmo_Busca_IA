@@ -153,6 +153,17 @@ def print_caminho_final(caminho_final):
         print(f"Elemento trocado: {trocado}")
         
 
+def eh_resolvivel(tabuleiro):
+    # Converte o tabuleiro em uma lista unidimensional
+    tabuleiro_unidimensional = [numero for linha in tabuleiro for numero in linha if numero != 0]
+    numero_inversoes = 0
+    for i in range(len(tabuleiro_unidimensional)):
+        for j in range(i + 1, len(tabuleiro_unidimensional)):
+            if tabuleiro_unidimensional[i] > tabuleiro_unidimensional[j]:
+                numero_inversoes += 1
+    return numero_inversoes % 2 == 0
+        
+
 # Ainda não sei se a importação dessas funções vai conflitar com o Flask, então por enquanto vou deixar a execução dos testes somente dentro do escopo de __main__
 if __name__ == '__main__':
     
