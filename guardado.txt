@@ -1,0 +1,67 @@
+import {useState} from "react";
+
+import './grid.css'
+
+const initialLocalPecas = [
+    [1,1,1],
+    [1,1,1],
+    [1,1,0]
+];
+
+function MyGrid(){
+    const [localPecas, setLocalPecas] = useState(initialLocalPecas);
+    const [pecaSelecionada, setPecaSelecionada] = useState(null);
+
+    function selectPeca(id){
+        setPecaSelecionada(id);
+        alert(`Peça selecionada ${id}`);
+    }
+
+    function movePeca(){
+        if(!pecaSelecionada){
+            alert("Selecione uma peça primeiro!");
+            return;
+        }
+
+        const posPeca = findPosition(parseInt(pecaSelecionada.replace("peca", ""), 10));
+        const posVazio = findPosition(0);
+
+        if(isNeighbor(posPeca, posVazio)){
+            const novaMatriz = localPecas.map((row) => [...row]);
+            novaMatriz[posPeca.row][posPeca.col] = 0;
+            novaMatriz[posVazio.row][posVazio.col] = parseInt(pecaSelecionada.replace("peca", ""), 10);
+                
+            setLocalPecas(novaMatriz);
+            setPecaSelecionada(null);
+        }else{
+            alert("A peça selecionada não esta ao lado do quadrado vazio!")
+        }
+    }
+
+    function findPosition(value){
+        for(let row = 0; row < localPecas.length; row++){
+            for(let col = 0; col < localPecas[row].length; col++){
+                if(localPecas[row][col] === value){
+                    return {row, col};
+                }
+            }
+        }
+        return null;
+    }
+
+    function isNeighbor (pos1, pos2){
+        const rowDiff = Math.abs(pos1.row - pos2.row);
+        const colDiff = Math.abs(pos1.col - pos2.col);
+        return (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1);
+    }
+
+    return(
+        <><div className="quebraCabeca" aria-disabled>
+            {localPecas.flat().map((value, index) => (
+                <div key={index} className="peca" id={`peca${value}`} onClick={value !== 0 ? () => selectPeca(`peca${value}`) : null}>{value !== 0 ? value : ""}</div>
+            ))}
+        </div><button onClick={movePeca} style={{ marginTop: "20px" }}>Mover peça</button></>
+    );
+}
+
+export default MyGrid;
