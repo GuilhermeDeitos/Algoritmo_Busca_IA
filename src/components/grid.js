@@ -1,4 +1,5 @@
 import {useState} from "react";
+import axios, { formToJSON } from 'axios';
 
 import MyButton from './button';
 
@@ -8,20 +9,33 @@ function MyGrid(){
     const correctAnswer = [
         [1,2,3],
         [4,5,6],
-        [7,8,9]
+        [7,8,0]
     ]
-
     const initialLocalPecas = [
-        [0,0,0],
-        [0,0,0],
-        [0,0,0]
+        [null,null,null],
+        [null,null,null],
+        [null,null,null]
     ];
-
-    fetch('https://jsonplaceholder.typicode.com/users').then(Response => Response.json()).then(json => console.log(json));
 
     const [localPecas, setLocalPecas] = useState(initialLocalPecas);
     const [pecaSelecionada, setPecaSelecionada] = useState(null);
     const [isDisable, setIsDisable] = useState(false);
+
+    axios.get("http://127.0.0.1:5000").then((response) => {
+        console.log(response.data);
+    });
+
+    async function buscaHeuristica() {
+        await gerarMatriz3x3();
+        const novaMatriz = localPecas;
+        console.log(novaMatriz);
+        try {
+            const response = await axios.post("http://127.0.0.1:5000/busca-heuristica", {matriz: formToJSON(localPecas)});
+            console.log(response.data);
+        } catch (error) {
+            console.error("Erro ao buscar dados:", error);
+        }
+    }
 
     function selectPeca(id){
         setPecaSelecionada(id);
@@ -51,7 +65,7 @@ function MyGrid(){
                 if(localPecas[i][j] === id){
                     for(let x = 0; x < localPecas.length; x++){
                         for(let y = 0; y < localPecas[x].length; y++){
-                            if(localPecas[x][y] === 9){
+                            if(localPecas[x][y] === 0){
                                 if(x - i === 0 && y - j === 1){
                                     console.log("esquerda")
                                     return[[i, j], [x, y]]
@@ -88,7 +102,7 @@ function MyGrid(){
     }
 
     function gerarMatriz3x3() {
-        const numeros = Array.from({ length: 9 }, (_, i) => i + 1);
+        const numeros = Array.from({ length: 9 }, (_, i) => i);
         for (let i = numeros.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [numeros[i], numeros[j]] = [numeros[j], numeros[i]];
@@ -105,13 +119,13 @@ function MyGrid(){
         <>
             <div className="quebraCabeca">
                 {localPecas.flat().map((value, index) => (
-                    <div key={index} className="peca" id={`peca${value}`} onClick={value !== 0 && value !== 9 ? () => selectPeca(value) : null}>{value !== 0 ? value : ""}</div>
+                    <div key={index} className="peca" id={`peca${value}`} onClick={value !== null ? () => selectPeca(value) : null}>{value !== null ? value : ""}</div>
                 ))}
             </div>
             <div>
                 <MyButton onClick={() => gerarMatriz3x3()} texto={"Na mão"} disabled={isDisable}/>
-                <MyButton texto={"Algoritmo X"}/>
-                <MyButton texto={"Algoritmo Y"}/>
+                <MyButton onClick={() => buscaHeuristica()} texto={"Algoritmo X"} disabled={isDisable}/>
+                <MyButton texto={"Algoritmo Y"} disabled={isDisable}/>
             </div>
             <MyButton onClick={() => verify()} texto={"Verificar vitória"}/>
         </>
