@@ -45,20 +45,20 @@ function MyGrid(){
     function isNeighbor(id){
         for(let i = 0; i < localPecas.length; i++){
             for(let j = 0; j< localPecas[i].length; j++){
-                if(localPecas[i][j] == id){
+                if(localPecas[i][j] === id){
                     for(let x = 0; x < localPecas.length; x++){
                         for(let y = 0; y < localPecas[x].length; y++){
-                            if(localPecas[x][y] == 9){
-                                if(x - i == 0 && y - j == 1){
+                            if(localPecas[x][y] === 9){
+                                if(x - i === 0 && y - j === 1){
                                     console.log("esquerda")
                                     return[[i, j], [x, y]]
-                                }else if(x - i == 0 && y - j == -1){
+                                }else if(x - i === 0 && y - j === -1){
                                     console.log("direita")
                                     return[[i, j], [x, y]]
-                                }else if(x - i == -1 && y - j == 0){
+                                }else if(x - i === -1 && y - j === 0){
                                     console.log("baixo")
                                     return[[i, j], [x, y]]
-                                }else if(x - i == 1 && y - j == 0){
+                                }else if(x - i === 1 && y - j === 0){
                                     console.log("cima")
                                     return[[i, j], [x, y]]
                                 }else{
