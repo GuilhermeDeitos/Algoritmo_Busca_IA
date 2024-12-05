@@ -17,8 +17,11 @@ function MyGrid(){
         [0,0,0]
     ];
 
+    fetch('https://jsonplaceholder.typicode.com/users').then(Response => Response.json()).then(json => console.log(json));
+
     const [localPecas, setLocalPecas] = useState(initialLocalPecas);
     const [pecaSelecionada, setPecaSelecionada] = useState(null);
+    const [isDisable, setIsDisable] = useState(false);
 
     function selectPeca(id){
         setPecaSelecionada(id);
@@ -77,6 +80,7 @@ function MyGrid(){
         const venceu = JSON.stringify(localPecas) === JSON.stringify(correctAnswer);
         if(venceu){
             alert("vc venceu")
+            setIsDisable(false);
             setLocalPecas(initialLocalPecas);
         }else{
             alert("posicione as peças na ordem correta!")
@@ -94,18 +98,18 @@ function MyGrid(){
             matriz.push(numeros.slice(i * 3, i * 3 + 3));
         }
         setLocalPecas(matriz);
-        console.log("teste")
+        setIsDisable(true);
     }
 
     return(
         <>
-            <div className="quebraCabeca" aria-disabled>
+            <div className="quebraCabeca">
                 {localPecas.flat().map((value, index) => (
                     <div key={index} className="peca" id={`peca${value}`} onClick={value !== 0 && value !== 9 ? () => selectPeca(value) : null}>{value !== 0 ? value : ""}</div>
                 ))}
             </div>
             <div>
-                <MyButton onClick={() => gerarMatriz3x3()}texto={"Na mão"}/>
+                <MyButton onClick={() => gerarMatriz3x3()} texto={"Na mão"} disabled={isDisable}/>
                 <MyButton texto={"Algoritmo X"}/>
                 <MyButton texto={"Algoritmo Y"}/>
             </div>
