@@ -12,6 +12,7 @@ class EstadoQuebraCabeca:
         self.anterior = anterior
         self.posicao_vazia = self.encontrar_posicao_vazia()
         self.prioridade = self.movimentos + self.calcular_distancia_manhattan()
+        print(f"tabuleiro: {tabuleiro}")
 
     # Encontra a posição do espaço vazio (0) no tabuleiro
     def encontrar_posicao_vazia(self):
@@ -59,6 +60,7 @@ class EstadoQuebraCabeca:
 def a_estrela(tabuleiro_inicial):
     # Função A* para resolver o quebra-cabeça
     estado_inicial = EstadoQuebraCabeca(tabuleiro_inicial)
+    print(f"estado inicial: {estado_inicial}")
     fila_prioridade = []
     heapq.heappush(fila_prioridade, estado_inicial)
     visitados = set()

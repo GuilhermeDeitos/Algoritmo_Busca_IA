@@ -1,6 +1,7 @@
 import numpy as np
 from math import sqrt
 import time
+import threading
 
 lado = 0
 
@@ -16,6 +17,8 @@ Estado final do grafo de busca.
 ESTADO_OBJETIVO = np.array([[1, 2, 3],
                             [4, 5, 6],
                             [7, 8, 0]])
+
+ESTADO_INICIAL = []
 
 
 def comparar_matrizes(estado_atual, ESTADO_OBJETIVO):
@@ -122,10 +125,25 @@ def profundidade(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem):
     while(True):
         profundidade_limite += 1
         retorno = profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem)
-        print(profundidade_limite)
+        """ print(profundidade_limite) """
         if retorno:         # Encontrado o caminho de saída
             return retorno
         
+def profundidade_timeOut(funcao, args, tempo_limite):
+    resultado = []
+    def wrapper():
+        resultado.append(funcao(*args))
+
+    thread = threading.Thread(target=wrapper)
+    thread.start()
+
+    thread.join(timeout=tempo_limite)
+
+    if thread.is_alive():
+        print("Tempo limite atingido!")
+        return False
+    
+    return resultado[0] if resultado else None
 
 def print_caminho_final(caminho_final):
     i = 0
@@ -150,12 +168,8 @@ def eh_resolvivel(tabuleiro):
 
 # Ainda não sei se a importação dessas funções vai conflitar com o Flask, então por enquanto vou deixar a execução dos testes somente dentro do escopo de __main__
 if __name__ == '__main__':
-    
     lado = ESTADO_OBJETIVO.size
     lado = int(sqrt(lado)) 
-    ESTADO_INICIAL = np.array([[1, 3, 2],
-                               [4, 6, 0],
-                               [7, 8, 5]])
     
     if(eh_resolvivel(ESTADO_INICIAL)):
         print("RESOLVIVEL!")
