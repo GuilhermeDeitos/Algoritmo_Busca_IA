@@ -21,25 +21,52 @@ function MyGrid(){
     const [pecaSelecionada, setPecaSelecionada] = useState(null);
     const [isDisable, setIsDisable] = useState(false);
 
-    axios.get("http://127.0.0.1:5000").then((response) => {
-        console.log(response.data);
-    });
+    function espera(ms){ return new Promise(resolve => setTimeout(resolve, ms));}
 
     async function buscaHeuristica() {
-        await gerarMatriz3x3();
-        const novaMatriz = localPecas;
-        console.log(novaMatriz);
+        const novaMatriz = gerarMatriz3x3(); // Gere a nova matriz
+        setLocalPecas(novaMatriz); // Atualize o estado
         try {
-            const response = await axios.post("http://127.0.0.1:5000/busca-heuristica", {matriz: formToJSON(localPecas)});
-            console.log(response.data);
+          // Use a matriz gerada diretamente, em vez de confiar no estado
+            const response = await axios.post("http://127.0.0.1:5000/busca-heuristica", {matriz : JSON.stringify(novaMatriz)});
+            move_buscas(response.data["caminho"]);
         } catch (error) {
-            console.error("Erro ao buscar dados:", error);
+            console.error("Erro ao buscar dados:", error.response.data);
+            alert(JSON.stringify(error.response.data["erro"]));
+            setLocalPecas(initialLocalPecas)
+            setIsDisable(false);
+        }
+    }
+
+    async function buscaCega(){
+        const novaMatriz = gerarMatriz3x3();
+        setLocalPecas(novaMatriz);
+        try {
+            const response = await axios.post("http://127.0.0.1:5000/busca-cega", {matriz : JSON.stringify(novaMatriz)});
+            move_buscas(response.data["caminho"]);
+        }catch (error){
+            console.error("Erro ao buscar dados:", error.response.data);
+            alert(JSON.stringify(error.response.data["erro"]));
+            setLocalPecas(initialLocalPecas)
+            setIsDisable(false);
         }
+    }
+
+    function naMao(){
+        const novaMatriz = gerarMatriz3x3();
+        setLocalPecas(novaMatriz);
+    }
+
+    async function move_buscas(matriz){
+        for(let i = 0; i < matriz.length; i++){
+            setLocalPecas(matriz[i]);
+            await espera(500);
+        }
+        
     }
 
     function selectPeca(id){
         setPecaSelecionada(id);
-        console.log(`Peça selecionada ${id}`);
         const [pecaClicada, pecaNove] = isNeighbor(id);
         move(pecaClicada, pecaNove);
     }
@@ -48,7 +75,6 @@ function MyGrid(){
         const [i1, j1] = pecaClicada;
         const [i2, j2] = pecaNove;
         if (i1 === null || j1 === null || i2 === null || j2 === null) {
-            console.log("Esta casa não é vizinha do 9");
             return;
         }
         const novaMatriz = [...localPecas.map(row => [...row])];
@@ -56,7 +82,6 @@ function MyGrid(){
         novaMatriz[i1][j1] = novaMatriz[i2][j2];
         novaMatriz[i2][j2] = temp;
         setLocalPecas(novaMatriz);
-        console.log("Movimento realizado:", novaMatriz);
     }    
 
     function isNeighbor(id){
@@ -67,16 +92,12 @@ function MyGrid(){
                         for(let y = 0; y < localPecas[x].length; y++){
                             if(localPecas[x][y] === 0){
                                 if(x - i === 0 && y - j === 1){
-                                    console.log("esquerda")
                                     return[[i, j], [x, y]]
                                 }else if(x - i === 0 && y - j === -1){
-                                    console.log("direita")
                                     return[[i, j], [x, y]]
                                 }else if(x - i === -1 && y - j === 0){
-                                    console.log("baixo")
                                     return[[i, j], [x, y]]
                                 }else if(x - i === 1 && y - j === 0){
-                                    console.log("cima")
                                     return[[i, j], [x, y]]
                                 }else{
                                     return[[null, null], [null, null]]
@@ -111,9 +132,9 @@ function MyGrid(){
         for (let i = 0; i < 3; i++) {
             matriz.push(numeros.slice(i * 3, i * 3 + 3));
         }
-        setLocalPecas(matriz);
         setIsDisable(true);
-    }
+        return matriz;
+    }
 
     return(
         <>
@@ -123,9 +144,9 @@ function MyGrid(){
                 ))}
             </div>
             <div>
-                <MyButton onClick={() => gerarMatriz3x3()} texto={"Na mão"} disabled={isDisable}/>
-                <MyButton onClick={() => buscaHeuristica()} texto={"Algoritmo X"} disabled={isDisable}/>
-                <MyButton texto={"Algoritmo Y"} disabled={isDisable}/>
+                <MyButton onClick={() => naMao()} texto={"Na mão"} disabled={isDisable}/>
+                <MyButton onClick={() => buscaHeuristica()} texto={"A*"} disabled={isDisable}/>
+                <MyButton onClick={() => buscaCega()} texto={"Profundidade Iterativa"} disabled={isDisable}/>
             </div>
             <MyButton onClick={() => verify()} texto={"Verificar vitória"}/>
         </>
