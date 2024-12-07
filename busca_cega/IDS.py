@@ -1,8 +1,11 @@
 import numpy as np
 from math import sqrt
-import time
 
 lado = 0
+
+# Contadores para métricas
+nos_gerados = 0
+nos_visitados = 0
 
 #IDS troca tempo por eficiência de memória (RAM), quando comparado com BFS.
 
@@ -66,7 +69,7 @@ def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, o
                 Se retorno == False, é um caminho sem fim.
                 Se retorno == True,  é o node destino!
     '''
-    
+    global nos_gerados, nos_visitados
     flag_diferente = False  # True se atual e OBJETIVO forem diferentes.
     zero_i = 0              # Posição i de 0 no estado_atual
     zero_j = 0              # Posição j de 0 no estado_atual

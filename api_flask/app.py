@@ -1,5 +1,7 @@
 import os
 import sys
+from time import time
+import tracemalloc
 from flask import Flask, request, jsonify
 
 # Configura os caminhos para garantir que as importações funcionem
@@ -32,17 +34,32 @@ def index():
         }
     })
 
+
 @app.route('/busca-heuristica', methods=['POST'])
 def rota_busca_heuristica():
     print("=== Realizando Busca Heuristica (A*) ===")
     dados = request.get_json()
     matriz = dados.get("matriz")
+    
     if not matriz:
         return jsonify({"erro": "Matriz não fornecida"}), 400
 
     try:
         estado_inicial = EstadoQuebraCabeca(matriz)
+        
+        t_inicial = time.time()
+        print("Tempo inicial a*: ", t_inicial)
+        tracemalloc.start()
+        
         resultado = a_estrela(estado_inicial)
+        
+        snapshot = tracemalloc.take_snapshot()
+        tracemalloc.stop()
+        t_final = time.time()
+        print("Tempo final a*: ", t_final)
+        print("Tempo total a*: ", t_final - t_inicial)
+        print(f"Memória utilizada: {sum(stat.size for stat in snapshot.statistics('lineno')) / 1024:.2f} KB")
+
 
         if resultado:
             return jsonify({"tipo_busca": "Busca Heurística A*", "caminho": resultado})
@@ -51,10 +68,13 @@ def rota_busca_heuristica():
         return jsonify({"erro": str(e)}), 500
 
 @app.route('/busca-cega', methods=['POST'])
+
+
 def rota_busca_cega():
     print("=== Realizando Busca Cega (Profundidade Iterativa) ===")
     dados = request.get_json()
     matriz = dados.get("matriz")
+    
     if not matriz:
         return jsonify({"erro": "Matriz não fornecida"}), 400
 
@@ -62,7 +82,20 @@ def rota_busca_cega():
         if not eh_resolvivel(matriz):
             return jsonify({"erro": "O problema não é resolvível."}), 400
 
+        t_inicial = time.time()
+        print("Tempo inicial IDS: ", t_inicial)
+        tracemalloc.start()
+        
         caminho_final = profundidade(matriz, ESTADO_OBJETIVO, -1, (0, 0))
+        
+        snapshot = tracemalloc.take_snapshot()
+        tracemalloc.stop()
+        t_final = time.time()
+        print("Tempo final IDS: ", t_final)
+        print("Tempo total IDS: ", t_final - t_inicial)
+        print(f"Memória utilizada: {sum(stat.size for stat in snapshot.statistics('lineno')) / 1024:.2f} KB")
+        
+        
         if caminho_final:
             return jsonify({"tipo_busca": "Busca Cega (Profundidade Iterativa)", "caminho": caminho_final})
         return jsonify({"erro": "Solução não encontrada"}), 404

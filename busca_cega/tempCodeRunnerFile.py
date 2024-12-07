@@ -1,2 +1,0 @@
-(caminho_final)
-    else:
