@@ -69,14 +69,14 @@ def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, o
     '''
     #time.sleep(1)
     #print("---------------------++++++ Sleep +++++++--------------------")
-    flag_diferente = False  # True se atual e OBJETIVO forem diferentes.
-    zero_i = 0              # Posição i de 0 no estado_atual
-    zero_j = 0              # Posição j de 0 no estado_atual
+    #flag_diferente     True se atual e OBJETIVO forem diferentes.
+    #zero_i             Posição i de 0 no estado_atual
+    #zero_j             osição j de 0 no estado_atual
 
     # SVamove se o estado atual é o ESTADO_OBJETIVO
     flag_diferente, zero_i, zero_j = comparar_matrizes(estado_atual, ESTADO_OBJETIVO)
         
-    if(flag_diferente == False):    # Se sim, retornamos a matriz do estado atual.
+    if not flag_diferente:    # Se sim, retornamos a matriz do estado atual.
         print("f_D False")
         return [(estado_atual, 0)]  # O segundo item da tupla é o número movido na etapa atual
     
@@ -170,9 +170,13 @@ if __name__ == '__main__':
     lado = ESTADO_OBJETIVO.size
     lado = int(sqrt(lado)) 
     ESTADO_INICIAL = np.array([[1, 2, 3],
-                               [4, 6, 0],
-                               [7, 5, 8]])
+                               [4, 6, 8],
+                               [7, 5, 0]])
     
-    caminho_final = profundidade(ESTADO_INICIAL, ESTADO_OBJETIVO, -1, (0, 0))
-    caminho_final.reverse()
-    print_caminho_final(caminho_final)
+    if(eh_resolvivel(ESTADO_INICIAL)):
+        print("RESOLVIVEL!")
+        caminho_final = profundidade(ESTADO_INICIAL, ESTADO_OBJETIVO, -1, (0, 0))
+        caminho_final.reverse()
+        print_caminho_final(caminho_final)
+    else:
+        print("Não resolvivel!")

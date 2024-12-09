@@ -1,12 +1,8 @@
 import numpy as np
 from math import sqrt
-import threading
+import time
 
 lado = 0
-
-# Contadores para métricas
-#nos_gerados = 0
-#nos_visitados = 0
 
 #IDS troca tempo por eficiência de memória (RAM), quando comparado com BFS.
 
@@ -21,7 +17,6 @@ ESTADO_OBJETIVO = np.array([[1, 2, 3],
                             [4, 5, 6],
                             [7, 8, 0]])
 
-ESTADO_INICIAL = []
 
 def comparar_matrizes(estado_atual, ESTADO_OBJETIVO):
     flag_diferente = False
@@ -36,6 +31,7 @@ def comparar_matrizes(estado_atual, ESTADO_OBJETIVO):
             if valor == 0:
                 zero_i = i
                 zero_j = j
+                #print(f"====CompMatrix ZeroI: {zero_i} ZeroJ: {zero_j}")
     #Ainda dá pra deixar esse loop for mais eficiente
     
     return flag_diferente, zero_i, zero_j
@@ -58,105 +54,52 @@ def gerar_estado_inicial(ladol):
 
 
 def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem):
-    '''
-    Função Busca em Profundidade Iterativa (IDS):
-    
-    Parâmetro 1: Estado atual,          matriz quadrada de inteiros;
-    Parâmetro 2: Estado objetivo,       matriz quadrada de inteiros;
-    Parâmetro 3: Profundidade Atual     inteiro;
-    Parâmetro 4: Profundidade Limite    inteiro;
-
-    Retorno:    Vetor com o caminho até o nó objetivo
-                Conteúdo do vetor: tupla: (matriz, número movido) de cada iteração
-                Se retorno == False, é um caminho sem fim.
-                Se retorno == True,  é o node destino!
-    '''
-    
-    # Compara o estado atual com o objetivo e localiza a posição do zero.
     flag_diferente, zero_i, zero_j = comparar_matrizes(estado_atual, ESTADO_OBJETIVO)
-    
     if not flag_diferente:
-        # Se o estado atual for o objetivo, retornamos o caminho percorrido até ele.
         return [(estado_atual, 0)]
-    
     if profundidade_limite == 0:
-        # Caso o limite de profundidade seja alcançado, retornamos False indicando um caminho sem sucesso.
         return False
 
-    # Inicializa a lista de fronteira com a posição do zero no estado atual.
     lista_fronteira = [(zero_i, zero_j)]
-    lista_explorado = []  # Lista para armazenar estados já visitados.
+    lista_explorado = []
 
     for _ in range(profundidade_limite):
         if not lista_fronteira:
-            # Se a fronteira estiver vazia, não há mais estados para explorar.
             return False
 
-        # Remove o próximo estado da fronteira e o adiciona à lista de explorados.
+        # Remove o próximo estado da fronteira
         atual = lista_fronteira.pop(0)
         lista_explorado.append(atual)
 
-        # Itera sobre os movimentos possíveis: baixo, direita, cima, esquerda.
         for di, dj in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
             novo_i, novo_j = atual[0] + di, atual[1] + dj
-            
-            # Verifica se a nova posição está dentro dos limites da matriz e se ainda não foi explorada.
             if 0 <= novo_i < lado and 0 <= novo_j < lado and (novo_i, novo_j) not in lista_explorado:
-                # Cria uma cópia do estado atual para modificar sem alterar o original.
                 proximo_estado = np.copy(estado_atual)
-                
-                # Troca o zero pelo número na nova posição.
                 proximo_estado[zero_i][zero_j], proximo_estado[novo_i][novo_j] = (
                     proximo_estado[novo_i][novo_j],
                     proximo_estado[zero_i][zero_j],
                 )
-                
-                # Chamada recursiva para explorar o próximo estado.
                 retorno = profundidade_iterativa(proximo_estado, ESTADO_OBJETIVO, profundidade_limite - 1, (zero_i, zero_j))
-                
                 if retorno:
-                    # Se a solução for encontrada, adiciona o estado atual ao caminho e retorna.
                     retorno.append((estado_atual, proximo_estado[novo_i][novo_j]))
                     return retorno
-    
-    # Se nenhum caminho válido for encontrado, retorna False.
     return False
 
 
 
-
 def profundidade(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem):
-    #global nos_gerados, nos_visitados
-    #profundidade_limite += 1
     while(True):
         profundidade_limite += 1
+        print(f"Profundidade limite: { profundidade_limite }")
         retorno = profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem)
-        print(profundidade_limite)
         
         if retorno:         # Encontrado o caminho de saída
             return retorno
-
-"""
-def profundidade_timeOut(funcao, args, tempo_limite):
-    resultado = []
-    def wrapper():
-        resultado.append(funcao(*args))
-
-    thread = threading.Thread(target=wrapper)
-    thread.start()
-
-    thread.join(timeout=tempo_limite)
-
-    if thread.is_alive():
-        print("Tempo limite atingido!")
-        return False
-    
-    return resultado[0] if resultado else None
-"""
+        
 
 def print_caminho_final(caminho_final):
     i = 0
-    print("\n\n Caminho Final:")
+    print("\n\n Caminho FINAL:")
     for matriz, trocado in caminho_final:
         print("=+=---===--==--===---=+=")
         print(f"Matriz {i}:")
@@ -173,21 +116,17 @@ def eh_resolvivel(tabuleiro):
             if tabuleiro_unidimensional[i] > tabuleiro_unidimensional[j]:
                 numero_inversoes += 1
     return numero_inversoes % 2 == 0
-
+        
 
 # Ainda não sei se a importação dessas funções vai conflitar com o Flask, então por enquanto vou deixar a execução dos testes somente dentro do escopo de __main__
 if __name__ == '__main__':
-    #nos_gerados = nos_visitados = 0
+    
     lado = ESTADO_OBJETIVO.size
     lado = int(sqrt(lado)) 
-    ESTADO_INICIAL = np.array([[1, 2, 3],
-                               [4, 6, 8],
-                               [7, 5, 0]])
+    ESTADO_INICIAL = np.array([[1, 2, 7],
+                               [6, 4, 8],
+                               [3, 0, 5]])
     
-    if(eh_resolvivel(ESTADO_INICIAL)):
-        print("RESOLVIVEL!")
-        caminho_final = profundidade(ESTADO_INICIAL, ESTADO_OBJETIVO, -1, (0, 0))
-        caminho_final.reverse()
-        print_caminho_final(caminho_final)
-    else:
-        print("Não resolvivel!")
+    caminho_final = profundidade(ESTADO_INICIAL, ESTADO_OBJETIVO, -1, (0, 0))
+    caminho_final.reverse()
+    print_caminho_final(caminho_final)

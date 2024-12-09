@@ -109,9 +109,9 @@ def eh_resolvivel(tabuleiro):
 # ]
 
 tabuleiro_inicial = [
-    [1, 2, 3],
-    [4, 6, 0],
-    [7, 5, 8]
+    [1, 2, 7],
+    [6, 4, 8],
+    [3, 0, 5]
 ]
 
 if eh_resolvivel(tabuleiro_inicial):
