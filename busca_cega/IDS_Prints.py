@@ -145,7 +145,7 @@ def profundidade(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem):
 
 def print_caminho_final(caminho_final):
     i = 0
-    print("\n\n")
+    print("\n\n Caminho FINAL:")
     for matriz, trocado in caminho_final:
         print("=+=---===--==--===---=+=")
         print(f"Matriz {i}:")

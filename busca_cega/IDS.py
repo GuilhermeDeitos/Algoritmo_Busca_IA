@@ -5,8 +5,8 @@ import threading
 lado = 0
 
 # Contadores para métricas
-nos_gerados = 0
-nos_visitados = 0
+#nos_gerados = 0
+#nos_visitados = 0
 
 #IDS troca tempo por eficiência de memória (RAM), quando comparado com BFS.
 
@@ -71,7 +71,7 @@ def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, o
                 Se retorno == False, é um caminho sem fim.
                 Se retorno == True,  é o node destino!
     '''
-    global nos_gerados, nos_visitados
+    #global nos_gerados, nos_visitados
     flag_diferente = False  # True se atual e OBJETIVO forem diferentes.
     zero_i = 0              # Posição i de 0 no estado_atual
     zero_j = 0              # Posição j de 0 no estado_atual
@@ -110,7 +110,7 @@ def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, o
                 
                 proximo_estado = np.copy(estado_atual)
                 
-                nos_gerados += 1
+                #nos_gerados += 1
                 
                 proximo_estado[zero_i][zero_j] = numero_trocado
                 proximo_estado[zero_i + di][zero_j + dj] = 0
@@ -127,16 +127,17 @@ def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, o
 
 
 def profundidade(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem):
-    global nos_gerados, nos_visitados
-    profundidade_limite += 1
+    #global nos_gerados, nos_visitados
+    #profundidade_limite += 1
     while(True):
         profundidade_limite += 1
         retorno = profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem)
         print(profundidade_limite)
+        
         if retorno:         # Encontrado o caminho de saída
             return retorno
-        
-        
+
+"""
 def profundidade_timeOut(funcao, args, tempo_limite):
     resultado = []
     def wrapper():
@@ -151,8 +152,8 @@ def profundidade_timeOut(funcao, args, tempo_limite):
         print("Tempo limite atingido!")
         return False
     
-    return resultado[0] if resultado else None        
-
+    return resultado[0] if resultado else None
+"""
 
 def print_caminho_final(caminho_final):
     i = 0
@@ -173,11 +174,11 @@ def eh_resolvivel(tabuleiro):
             if tabuleiro_unidimensional[i] > tabuleiro_unidimensional[j]:
                 numero_inversoes += 1
     return numero_inversoes % 2 == 0
-        
+
 
 # Ainda não sei se a importação dessas funções vai conflitar com o Flask, então por enquanto vou deixar a execução dos testes somente dentro do escopo de __main__
 if __name__ == '__main__':
-    nos_gerados = nos_visitados = 0
+    #nos_gerados = nos_visitados = 0
     lado = ESTADO_OBJETIVO.size
     lado = int(sqrt(lado)) 
     ESTADO_INICIAL = np.array([[1, 3, 2],
