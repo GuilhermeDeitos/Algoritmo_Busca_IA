@@ -1,5 +1,6 @@
 import numpy as np
 from math import sqrt
+import threading
 
 lado = 0
 
@@ -131,9 +132,10 @@ def profundidade(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem):
     while(True):
         profundidade_limite += 1
         retorno = profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem)
-        """print(profundidade_limite)"""
+        print(profundidade_limite)
         if retorno:         # Encontrado o caminho de saída
             return retorno
+        
         
 def profundidade_timeOut(funcao, args, tempo_limite):
     resultado = []
@@ -150,6 +152,7 @@ def profundidade_timeOut(funcao, args, tempo_limite):
         return False
     
     return resultado[0] if resultado else None        
+
 
 def print_caminho_final(caminho_final):
     i = 0
