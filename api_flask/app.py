@@ -89,12 +89,12 @@ def rota_busca_cega():
         ESTADO_INICIAL = matriz
         #quero dar um limite de tempo para a execução da seguinte linha de codigo
 
-        caminho_final = profundidade_timeOut(funcao=profundidade, args=(matriz, ESTADO_OBJETIVO, -1, (0, 0)), tempo_limite=10)
 
         t_inicial = time.time()
         print("Tempo inicial IDS: ", t_inicial)
         tracemalloc.start()
         
+        caminho_final = profundidade_timeOut(funcao=profundidade, args=(matriz, ESTADO_OBJETIVO, -1, (0, 0)), tempo_limite=10)
         caminho_final = profundidade(matriz, ESTADO_OBJETIVO, -1, (0, 0))
         
         snapshot = tracemalloc.take_snapshot()
