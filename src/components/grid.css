@@ -19,10 +19,13 @@
 }
 
 #peca0 {
-    background-color: #b6b6b6;
+    /*background-color: #b6b6b6;
     cursor: default;
     background-image: url('./imagens/arthur/0.jpg');
-    background-size: cover;
+    background-size: cover;*/
+    border: none;
+    background: none;
+    color: transparent;
 }
 #peca1{
     background-image: url('./imagens/arthur/1.jpg');
