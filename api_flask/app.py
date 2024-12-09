@@ -48,9 +48,9 @@ def rota_busca_heuristica():
     if not matriz:
         return jsonify({"erro": "Matriz não fornecida"}), 400
     try:
-        estado_inicial = EstadoQuebraCabeca(matriz)
+        estado_inicial = matriz
         
-        t_inicial = time.time()
+        t_inicial = time()
         print("Tempo inicial a*: ", t_inicial)
         tracemalloc.start()
         
@@ -58,7 +58,7 @@ def rota_busca_heuristica():
         
         snapshot = tracemalloc.take_snapshot()
         tracemalloc.stop()
-        t_final = time.time()
+        t_final = time()
         print("Tempo final a*: ", t_final)
         print("Tempo total a*: ", t_final - t_inicial)
         print(f"Memória utilizada: {sum(stat.size for stat in snapshot.statistics('lineno')) / 1024:.2f} KB")
@@ -90,7 +90,7 @@ def rota_busca_cega():
         #quero dar um limite de tempo para a execução da seguinte linha de codigo
 
 
-        t_inicial = time.time()
+        t_inicial = time()
         print("Tempo inicial IDS: ", t_inicial)
         tracemalloc.start()
         
@@ -99,7 +99,7 @@ def rota_busca_cega():
         
         snapshot = tracemalloc.take_snapshot()
         tracemalloc.stop()
-        t_final = time.time()
+        t_final = time()
         print("Tempo final IDS: ", t_final)
         print("Tempo total IDS: ", t_final - t_inicial)
         print(f"Memória utilizada: {sum(stat.size for stat in snapshot.statistics('lineno')) / 1024:.2f} KB")
