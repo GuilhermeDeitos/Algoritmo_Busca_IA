@@ -3,6 +3,8 @@ import sys
 from time import time
 import tracemalloc
 from flask import Flask, request, jsonify
+from flask_cors import CORS
+
 
 # Configura os caminhos para garantir que as importações funcionem
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -13,7 +15,8 @@ if BASE_DIR not in sys.path:
 
 # Importa os módulos necessários
 from busca_heuristica.buscaHeuristica import a_estrela, EstadoQuebraCabeca
-from busca_cega.IDS import profundidade, eh_resolvivel, ESTADO_OBJETIVO
+from busca_cega.IDS import profundidade_timeOut, profundidade, eh_resolvivel, ESTADO_OBJETIVO, ESTADO_INICIAL
+from convert import string_para_matriz
 
 # Define o estado objetivo do quebra-cabeça
 ESTADO_OBJETIVO = [[1, 2, 3],
@@ -22,6 +25,7 @@ ESTADO_OBJETIVO = [[1, 2, 3],
 
 # Configuração da API Flask
 app = Flask(__name__)
+CORS(app, origins=["http://localhost:3000"], allow_headers=["Content-Type"])
 
 @app.route('/')
 def index():
@@ -40,10 +44,9 @@ def rota_busca_heuristica():
     print("=== Realizando Busca Heuristica (A*) ===")
     dados = request.get_json()
     matriz = dados.get("matriz")
-    
+    matriz = string_para_matriz(matriz)
     if not matriz:
         return jsonify({"erro": "Matriz não fornecida"}), 400
-
     try:
         estado_inicial = EstadoQuebraCabeca(matriz)
         
@@ -74,13 +77,19 @@ def rota_busca_cega():
     print("=== Realizando Busca Cega (Profundidade Iterativa) ===")
     dados = request.get_json()
     matriz = dados.get("matriz")
-    
+    matriz = string_para_matriz(matriz)
+    app.logger.info(f"Received data: {matriz}")
+
     if not matriz:
         return jsonify({"erro": "Matriz não fornecida"}), 400
 
     try:
         if not eh_resolvivel(matriz):
             return jsonify({"erro": "O problema não é resolvível."}), 400
+        ESTADO_INICIAL = matriz
+        #quero dar um limite de tempo para a execução da seguinte linha de codigo
+
+        caminho_final = profundidade_timeOut(funcao=profundidade, args=(matriz, ESTADO_OBJETIVO, -1, (0, 0)), tempo_limite=10)
 
         t_inicial = time.time()
         print("Tempo inicial IDS: ", t_inicial)

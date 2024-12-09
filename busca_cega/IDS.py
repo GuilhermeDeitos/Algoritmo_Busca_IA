@@ -20,6 +20,7 @@ ESTADO_OBJETIVO = np.array([[1, 2, 3],
                             [4, 5, 6],
                             [7, 8, 0]])
 
+ESTADO_INICIAL = []
 
 def comparar_matrizes(estado_atual, ESTADO_OBJETIVO):
     flag_diferente = False
@@ -107,6 +108,9 @@ def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, o
                 numero_trocado = estado_atual[zero_i + di][zero_j + dj]
                 
                 proximo_estado = np.copy(estado_atual)
+                
+                nos_gerados += 1
+                
                 proximo_estado[zero_i][zero_j] = numero_trocado
                 proximo_estado[zero_i + di][zero_j + dj] = 0
                 
@@ -122,13 +126,30 @@ def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, o
 
 
 def profundidade(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem):
+    global nos_gerados, nos_visitados
+    profundidade_limite += 1
     while(True):
         profundidade_limite += 1
         retorno = profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem)
-        print(profundidade_limite)
+        """print(profundidade_limite)"""
         if retorno:         # Encontrado o caminho de saída
             return retorno
         
+def profundidade_timeOut(funcao, args, tempo_limite):
+    resultado = []
+    def wrapper():
+        resultado.append(funcao(*args))
+
+    thread = threading.Thread(target=wrapper)
+    thread.start()
+
+    thread.join(timeout=tempo_limite)
+
+    if thread.is_alive():
+        print("Tempo limite atingido!")
+        return False
+    
+    return resultado[0] if resultado else None        
 
 def print_caminho_final(caminho_final):
     i = 0
@@ -153,7 +174,7 @@ def eh_resolvivel(tabuleiro):
 
 # Ainda não sei se a importação dessas funções vai conflitar com o Flask, então por enquanto vou deixar a execução dos testes somente dentro do escopo de __main__
 if __name__ == '__main__':
-    
+    nos_gerados = nos_visitados = 0
     lado = ESTADO_OBJETIVO.size
     lado = int(sqrt(lado)) 
     ESTADO_INICIAL = np.array([[1, 3, 2],
