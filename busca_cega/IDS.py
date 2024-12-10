@@ -136,23 +136,24 @@ def profundidade(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem):
         if retorno:         # Encontrado o caminho de saída
             return retorno
 
-"""
 def profundidade_timeOut(funcao, args, tempo_limite):
-    resultado = []
-    def wrapper():
-        resultado.append(funcao(*args))
+    class FuncaoThread(threading.Thread):
+        def __init__(self):
+            threading.Thread.__init__(self)
+            self.resultado = None
 
-    thread = threading.Thread(target=wrapper)
+        def run(self):
+            self.resultado = funcao(*args)
+
+    thread = FuncaoThread()
     thread.start()
-
     thread.join(timeout=tempo_limite)
-
+    
     if thread.is_alive():
         print("Tempo limite atingido!")
         return False
-    
-    return resultado[0] if resultado else None
-"""
+    else:
+        return thread.resultado
 
 def print_caminho_final(caminho_final):
     i = 0

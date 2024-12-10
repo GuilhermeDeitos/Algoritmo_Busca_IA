@@ -17,6 +17,7 @@ if BASE_DIR not in sys.path:
 from busca_heuristica.buscaHeuristica import a_estrela, EstadoQuebraCabeca
 from busca_cega.IDS import profundidade_timeOut, profundidade, eh_resolvivel, ESTADO_OBJETIVO, ESTADO_INICIAL
 from convert import string_para_matriz
+from write_on_archive import write_archive
 
 # Define o estado objetivo do quebra-cabeça
 ESTADO_OBJETIVO = [[1, 2, 3],
@@ -63,16 +64,19 @@ def rota_busca_heuristica():
         print("Tempo total a*: ", t_final - t_inicial)
         print(f"Memória utilizada: {sum(stat.size for stat in snapshot.statistics('lineno')) / 1024:.2f} KB")
 
-
         if resultado:
+            write_archive("BUSCA HEURISTICA", "exito!", estado_inicial, t_final - t_inicial, sum(stat.size for stat in snapshot.statistics('lineno')) / 1024)
             return jsonify({"tipo_busca": "Busca Heurística A*", "caminho": resultado})
+        
+        write_archive("BUSCA HEURISTICA", "falha!", estado_inicial, t_final - t_inicial, sum(stat.size for stat in snapshot.statistics('lineno')) / 1024)
         return jsonify({"erro": "Solução não encontrada"}), 404
+
     except Exception as e:
+        write_archive("BUSCA HEURISTICA", "falha!", estado_inicial, t_final - t_inicial, sum(stat.size for stat in snapshot.statistics('lineno')) / 1024)
         return jsonify({"erro": str(e)}), 500
+    
 
 @app.route('/busca-cega', methods=['POST'])
-
-
 def rota_busca_cega():
     print("=== Realizando Busca Cega (Profundidade Iterativa) ===")
     dados = request.get_json()
@@ -85,17 +89,16 @@ def rota_busca_cega():
 
     try:
         if not eh_resolvivel(matriz):
+            write_archive("BUSCA CEGA", "falha! (não resolvivel)", matriz, 0, 0)
             return jsonify({"erro": "O problema não é resolvível."}), 400
-        ESTADO_INICIAL = matriz
-        #quero dar um limite de tempo para a execução da seguinte linha de codigo
 
-
+        
         t_inicial = time()
         print("Tempo inicial IDS: ", t_inicial)
         tracemalloc.start()
         
         caminho_final = profundidade_timeOut(funcao=profundidade, args=(matriz, ESTADO_OBJETIVO, -1, (0, 0)), tempo_limite=10)
-        caminho_final = profundidade(matriz, ESTADO_OBJETIVO, -1, (0, 0))
+        """ caminho_final = profundidade(matriz, ESTADO_OBJETIVO, -1, (0, 0)) """
         
         snapshot = tracemalloc.take_snapshot()
         tracemalloc.stop()
@@ -106,9 +109,14 @@ def rota_busca_cega():
         
         
         if caminho_final:
+            write_archive("BUSCA CEGA", "exito!", matriz, t_final - t_inicial, sum(stat.size for stat in snapshot.statistics('lineno')) / 1024)
             return jsonify({"tipo_busca": "Busca Cega (Profundidade Iterativa)", "caminho": caminho_final})
+        
+        write_archive("BUSCA CEGA", "falha!", matriz, t_final - t_inicial, sum(stat.size for stat in snapshot.statistics('lineno')) / 1024)
         return jsonify({"erro": "Solução não encontrada"}), 404
+    
     except Exception as e:
+        write_archive("BUSCA CEGA", "falha!", matriz, t_final - t_inicial, sum(stat.size for stat in snapshot.statistics('lineno')) / 1024)
         return jsonify({"erro": str(e)}), 500
 
 if __name__ == '__main__':
