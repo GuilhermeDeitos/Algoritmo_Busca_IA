@@ -1,11 +1,12 @@
 import {useState} from "react";
+
 import axios from 'axios';
 
 import MyButton from './button';
 
 import './grid.css'
 
-function MyGrid(){
+function MyGridAuto(){
     const correctAnswer = [
         [1,2,3],
         [4,5,6],
@@ -112,6 +113,7 @@ function MyGrid(){
     }
 
     function verify(){
+        setLocalPecas(localPecas);
         const venceu = JSON.stringify(localPecas) === JSON.stringify(correctAnswer);
         if(venceu){
             alert("vc venceu")
@@ -153,4 +155,4 @@ function MyGrid(){
     );
 }
 
-export default MyGrid;
+export default MyGridAuto;
