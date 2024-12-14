@@ -5,8 +5,8 @@ import threading
 lado = 0
 
 # Contadores para métricas
-#nos_gerados = 0
-#nos_visitados = 0
+nos_gerados = 0
+nos_visitados = 0
 
 #IDS troca tempo por eficiência de memória (RAM), quando comparado com BFS.
 
@@ -126,7 +126,7 @@ def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, o
 
 
 def profundidade(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem):
-    #global nos_gerados, nos_visitados
+    global nos_gerados, nos_visitados
     #profundidade_limite += 1
     while(True):
         profundidade_limite += 1
@@ -178,12 +178,12 @@ def eh_resolvivel(tabuleiro):
 
 # Ainda não sei se a importação dessas funções vai conflitar com o Flask, então por enquanto vou deixar a execução dos testes somente dentro do escopo de __main__
 if __name__ == '__main__':
-    #nos_gerados = nos_visitados = 0
+    nos_gerados = nos_visitados = 0
     lado = ESTADO_OBJETIVO.size
     lado = int(sqrt(lado)) 
-    ESTADO_INICIAL = np.array([[1, 2, 3],
-                               [4, 6, 8],
-                               [7, 5, 0]])
+    ESTADO_INICIAL = np.array([[2, 3, 6],
+                               [1, 7, 5],
+                               [4, 0, 8]])
     
     if(eh_resolvivel(ESTADO_INICIAL)):
         print("RESOLVIVEL!")
