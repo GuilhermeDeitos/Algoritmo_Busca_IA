@@ -138,14 +138,11 @@ def profundidade(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem):
         print(profundidade_limite)
         
         if retorno:         # Encontrado o caminho de saída
-            retorno.reverse()
-            retorno_novo = []
-            for i in caminho_final:
-                matrix_novo = []
-                for j in i:
-                    matrix_novo.append(j.tolist())
-                retorno_novo.append(matrix_novo)
-            return retorno_novo
+            #print("IF Retorno")
+                
+            #print("AAAAAAAAAAAAAAA")
+            #print(retorno_novo)
+            return retorno
 
 def profundidade_timeOut(funcao, args, tempo_limite):
     class FuncaoThread(threading.Thread):
@@ -165,6 +162,7 @@ def profundidade_timeOut(funcao, args, tempo_limite):
         return False
     else:
         return thread.resultado
+    
 
 def print_caminho_final(caminho_final):
     i = 0
@@ -199,19 +197,14 @@ if __name__ == '__main__':
     if(eh_resolvivel(ESTADO_INICIAL)):
         print("RESOLVIVEL!")
         caminho_final = profundidade(ESTADO_INICIAL, ESTADO_OBJETIVO, -1, (0, 0))
-        caminho_final.reverse()
+
         #print_caminho_final(caminho_final)
 
         print("=--------------=")
         #caminho_final = [tup[0].tolist() for tup in caminho_final]
-        retorno = []
-        for i in caminho_final:
-            matrix_novo = []
-            for j in i:
-                matrix_novo.append(j.tolist())
-            retorno.append(matrix_novo)
+
             
-        print(retorno)
+        print(caminho_final)
             
     else:
         print("Não resolvivel!")

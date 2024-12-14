@@ -58,3 +58,41 @@ Matriz: [[2, 3, 6], [1, 7, 5], [4, 0, 8]]
 Tempo total: 0.999262809753418
 Memória utilizada: 6.310546875
 
+Método: BUSCA HEURISTICA
+Resultado: exito!
+Matriz: [[0, 8, 4], [7, 6, 2], [1, 3, 5]]
+Tempo total: 4.923668622970581
+Memória utilizada: 247.765625
+
+Método: BUSCA HEURISTICA
+Resultado: falha!
+Matriz: [[1, 0, 4], [6, 7, 5], [8, 3, 2]]
+Tempo total: 33.14030361175537
+Memória utilizada: 623.341796875
+
+Método: BUSCA HEURISTICA
+Resultado: exito!
+Matriz: [[0, 7, 2], [3, 4, 6], [1, 8, 5]]
+Tempo total: 0.04900836944580078
+Memória utilizada: 168.1962890625
+
+Método: BUSCA HEURISTICA
+Resultado: exito!
+Matriz: [[6, 8, 2], [3, 5, 7], [4, 0, 1]]
+Tempo total: 0.31821489334106445
+Memória utilizada: 246.8828125
+
+Método: BUSCA HEURISTICA
+Resultado: exito!
+Matriz: [[5, 8, 1], [2, 4, 3], [0, 7, 6]]
+Tempo total: 0.032547712326049805
+Memória utilizada: 89.294921875
+
+Método: BUSCA CEGA
+Resultado: falha! (não resolvivel)
+Matriz: [[2 1 7]
+ [0 5 6]
+ [3 4 8]]
+Tempo total: 0
+Memória utilizada: 0
+

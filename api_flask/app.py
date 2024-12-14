@@ -1,5 +1,5 @@
 import os
-import numpy
+import numpy as np
 import sys
 from time import time
 import tracemalloc
@@ -52,6 +52,8 @@ def rota_busca_heuristica():
     try:
         estado_inicial = matriz
         
+        print("Estado inicial: ", estado_inicial)
+        
         t_inicial = time()
         print("Tempo inicial a*: ", t_inicial)
         tracemalloc.start()
@@ -64,6 +66,7 @@ def rota_busca_heuristica():
         print("Tempo final a*: ", t_final)
         print("Tempo total a*: ", t_final - t_inicial)
         print(f"Memória utilizada: {sum(stat.size for stat in snapshot.statistics('lineno')) / 1024:.2f} KB")
+        print("Numero de passos: ", len(resultado))
 
         if resultado:
             write_archive("BUSCA HEURISTICA", "exito!", estado_inicial, t_final - t_inicial, sum(stat.size for stat in snapshot.statistics('lineno')) / 1024)
@@ -83,9 +86,11 @@ def rota_busca_cega():
     dados = request.get_json()
     matriz = dados.get("matriz")
     matriz = string_para_matriz(matriz)
+    matriz = np.array(matriz)
+
     app.logger.info(f"Received data: {matriz}")
 
-    if not matriz:
+    if not matriz[0][0] :
         return jsonify({"erro": "Matriz não fornecida"}), 400
 
     try:
@@ -93,20 +98,40 @@ def rota_busca_cega():
             write_archive("BUSCA CEGA", "falha! (não resolvivel)", matriz, 0, 0)
             return jsonify({"erro": "O problema não é resolvível."}), 400
 
+        print("Estado inicial: ", matriz)
         
         t_inicial = time()
         print("Tempo inicial IDS: ", t_inicial)
         tracemalloc.start()
         
-        #caminho_final = profundidade_timeOut(funcao=profundidade, args=(matriz, ESTADO_OBJETIVO, -1, (0, 0)), tempo_limite=10)
+        #resultado = profundidade_timeOut(funcao=profundidade, args=(matriz, ESTADO_OBJETIVO, -1, (0, 0)), tempo_limite=10)
         resultado = profundidade(matriz, ESTADO_OBJETIVO, -1, (0, 0))
-        
         snapshot = tracemalloc.take_snapshot()
         tracemalloc.stop()
         t_final = time()
-        print("Tempo final a*: ", t_final)
-        print("Tempo total a*: ", t_final - t_inicial)
+        
+        resultado.reverse()
+        #print("IF1")
+        resultado_novo = []
+        #print("IF2")
+        #print(retorno)
+        for i in resultado:     #Convertemos o output de uma matriz do numpy pra uma matriz python padrão
+            matrix_novo = []
+            for j in i:
+                if isinstance(j, np.ndarray):
+                    matrix_novo.append(j.tolist())
+                else:
+                    matrix_novo.append(j)
+            resultado_novo.append(matrix_novo)
+        resultado = resultado_novo
+        
+        print("p4")
+        print("Tempo final IDS: ", t_final)
+        print("Tempo total IDS: ", t_final - t_inicial)
         print(f"Memória utilizada: {sum(stat.size for stat in snapshot.statistics('lineno')) / 1024:.2f} KB")
+        print("Numero de passos: ", len(resultado))
+
+        print(resultado)
 
         if resultado:
             #write_archive("BUSCA CEGA", "exito!", matriz, t_final - t_inicial, sum(stat.size for stat in snapshot.statistics('lineno')) / 1024)
