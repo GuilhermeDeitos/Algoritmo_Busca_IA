@@ -109,9 +109,9 @@ def eh_resolvivel(tabuleiro):
 # ]
 
 tabuleiro_inicial = [
-    [1, 2, 7],
-    [6, 4, 8],
-    [3, 0, 5]
+    [2, 3, 6],
+    [1, 7, 5],
+    [4, 0, 8]
 ]
 
 if eh_resolvivel(tabuleiro_inicial):
@@ -125,6 +125,8 @@ if eh_resolvivel(tabuleiro_inicial):
             for linha in tabuleiro:
                 print(linha)
             print()
+        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+        print(caminho_solucao)
     else:
         print("Nenhuma solução encontrada.")
 else:

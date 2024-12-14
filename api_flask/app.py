@@ -1,4 +1,5 @@
 import os
+import numpy
 import sys
 from time import time
 import tracemalloc
@@ -97,27 +98,29 @@ def rota_busca_cega():
         print("Tempo inicial IDS: ", t_inicial)
         tracemalloc.start()
         
-        caminho_final = profundidade_timeOut(funcao=profundidade, args=(matriz, ESTADO_OBJETIVO, -1, (0, 0)), tempo_limite=10)
-        """ caminho_final = profundidade(matriz, ESTADO_OBJETIVO, -1, (0, 0)) """
+        #caminho_final = profundidade_timeOut(funcao=profundidade, args=(matriz, ESTADO_OBJETIVO, -1, (0, 0)), tempo_limite=10)
+        resultado = profundidade(matriz, ESTADO_OBJETIVO, -1, (0, 0))
         
         snapshot = tracemalloc.take_snapshot()
         tracemalloc.stop()
         t_final = time()
-        print("Tempo final IDS: ", t_final)
-        print("Tempo total IDS: ", t_final - t_inicial)
+        print("Tempo final a*: ", t_final)
+        print("Tempo total a*: ", t_final - t_inicial)
         print(f"Memória utilizada: {sum(stat.size for stat in snapshot.statistics('lineno')) / 1024:.2f} KB")
+
+        if resultado:
+            #write_archive("BUSCA CEGA", "exito!", matriz, t_final - t_inicial, sum(stat.size for stat in snapshot.statistics('lineno')) / 1024)
+            return jsonify({"tipo_busca": "Busca Cega IDS", "caminho": resultado})
         
-        
-        if caminho_final:
-            write_archive("BUSCA CEGA", "exito!", matriz, t_final - t_inicial, sum(stat.size for stat in snapshot.statistics('lineno')) / 1024)
-            return jsonify({"tipo_busca": "Busca Cega (Profundidade Iterativa)", "caminho": caminho_final})
-        
-        write_archive("BUSCA CEGA", "falha!", matriz, t_final - t_inicial, sum(stat.size for stat in snapshot.statistics('lineno')) / 1024)
+        #write_archive("BUSCA CEGA", "falha!", matriz, t_final - t_inicial, sum(stat.size for stat in snapshot.statistics('lineno')) / 1024)
         return jsonify({"erro": "Solução não encontrada"}), 404
-    
+
     except Exception as e:
-        write_archive("BUSCA CEGA", "falha!", matriz, t_final - t_inicial, sum(stat.size for stat in snapshot.statistics('lineno')) / 1024)
+        #write_archive("BUSCA CEGA", "falha!", matriz, t_final - t_inicial, sum(stat.size for stat in snapshot.statistics('lineno')) / 1024)
         return jsonify({"erro": str(e)}), 500
+    
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

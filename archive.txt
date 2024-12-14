@@ -1,0 +1,60 @@
+Método: BUSCA HEURISTICA
+Resultado: exito!
+Matriz: [[6, 3, 2], [8, 1, 0], [5, 7, 4]]
+Tempo total: 7.272615671157837
+Memória utilizada: 248.060546875
+
+Método: BUSCA CEGA
+Resultado: falha! (não resolvivel)
+Matriz: [[8, 6, 0], [4, 3, 2], [5, 1, 7]]
+Tempo total: 0
+Memória utilizada: 0
+
+Método: BUSCA HEURISTICA
+Resultado: exito!
+Matriz: [[3, 8, 4], [2, 1, 5], [7, 0, 6]]
+Tempo total: 0.7685048580169678
+Memória utilizada: 8443.2392578125
+
+Método: BUSCA CEGA
+Resultado: exito!
+Matriz: [[2, 3, 6], [1, 7, 5], [4, 0, 8]]
+Tempo total: 1.0234158039093018
+Memória utilizada: 13.482421875
+
+Método: BUSCA CEGA
+Resultado: falha!
+Matriz: [[2, 3, 6], [1, 7, 5], [4, 0, 8]]
+Tempo total: 1.0234158039093018
+Memória utilizada: 13.482421875
+
+Método: BUSCA CEGA
+Resultado: falha!
+Matriz: [[2, 3, 6], [1, 7, 5], [4, 0, 8]]
+Tempo total: 1.7671608924865723
+Memória utilizada: 10.8623046875
+
+Método: BUSCA CEGA
+Resultado: falha!
+Matriz: [[2, 3, 6], [1, 7, 5], [4, 0, 8]]
+Tempo total: 1.152799367904663
+Memória utilizada: 187.2412109375
+
+Método: BUSCA CEGA
+Resultado: falha!
+Matriz: [[2, 3, 6], [1, 7, 5], [4, 0, 8]]
+Tempo total: 1.28794527053833
+Memória utilizada: 12.4921875
+
+Método: BUSCA CEGA
+Resultado: falha!
+Matriz: [[2, 3, 6], [1, 7, 5], [4, 0, 8]]
+Tempo total: 1.6218898296356201
+Memória utilizada: 8.640625
+
+Método: BUSCA CEGA
+Resultado: falha!
+Matriz: [[2, 3, 6], [1, 7, 5], [4, 0, 8]]
+Tempo total: 0.999262809753418
+Memória utilizada: 6.310546875
+

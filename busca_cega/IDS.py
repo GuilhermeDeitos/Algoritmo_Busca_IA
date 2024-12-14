@@ -8,6 +8,7 @@ lado = 0
 nos_gerados = 0
 nos_visitados = 0
 
+
 #IDS troca tempo por eficiência de memória (RAM), quando comparado com BFS.
 
 '''
@@ -22,6 +23,9 @@ ESTADO_OBJETIVO = np.array([[1, 2, 3],
                             [7, 8, 0]])
 
 ESTADO_INICIAL = []
+
+lado = ESTADO_OBJETIVO.size
+lado = int(sqrt(lado)) 
 
 def comparar_matrizes(estado_atual, ESTADO_OBJETIVO):
     flag_diferente = False
@@ -66,7 +70,7 @@ def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, o
     Parâmetro 3: Profundidade Atual     inteiro;
     Parâmetro 4: Profundidade Limite    inteiro;
 
-    Retorno:    Vetor com o caminho até o nó objetivo
+    Retorno:    Vetor de tuplas, com o caminho até o nó objetivo
                 Conteúdo do vetor: tupla: (matriz, número movido) de cada iteração
                 Se retorno == False, é um caminho sem fim.
                 Se retorno == True,  é o node destino!
@@ -77,7 +81,7 @@ def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, o
     
     if not flag_diferente:
         # Se o estado atual for o objetivo, retornamos o caminho percorrido até ele.
-        return [(estado_atual, 0)]
+        return [estado_atual]
     
     if profundidade_limite == 0:
         # Caso o limite de profundidade seja alcançado, retornamos False indicando um caminho sem sucesso.
@@ -116,7 +120,7 @@ def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, o
                 
                 if retorno:
                     # Se a solução for encontrada, adiciona o estado atual ao caminho e retorna.
-                    retorno.append((estado_atual, proximo_estado[novo_i][novo_j]))
+                    retorno.append(estado_atual)
                     return retorno
     
     # Se nenhum caminho válido for encontrado, retorna False.
@@ -134,7 +138,14 @@ def profundidade(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem):
         print(profundidade_limite)
         
         if retorno:         # Encontrado o caminho de saída
-            return retorno
+            retorno.reverse()
+            retorno_novo = []
+            for i in caminho_final:
+                matrix_novo = []
+                for j in i:
+                    matrix_novo.append(j.tolist())
+                retorno_novo.append(matrix_novo)
+            return retorno_novo
 
 def profundidade_timeOut(funcao, args, tempo_limite):
     class FuncaoThread(threading.Thread):
@@ -189,6 +200,18 @@ if __name__ == '__main__':
         print("RESOLVIVEL!")
         caminho_final = profundidade(ESTADO_INICIAL, ESTADO_OBJETIVO, -1, (0, 0))
         caminho_final.reverse()
-        print_caminho_final(caminho_final)
+        #print_caminho_final(caminho_final)
+
+        print("=--------------=")
+        #caminho_final = [tup[0].tolist() for tup in caminho_final]
+        retorno = []
+        for i in caminho_final:
+            matrix_novo = []
+            for j in i:
+                matrix_novo.append(j.tolist())
+            retorno.append(matrix_novo)
+            
+        print(retorno)
+            
     else:
         print("Não resolvivel!")
