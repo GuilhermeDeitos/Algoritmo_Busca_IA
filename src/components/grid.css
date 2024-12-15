@@ -11,10 +11,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: gray;
+    background-color: #ffb6c1;
     font-size: 20;
     font-weight: bold;
-    border: 1px solid black;
+    border: 1px solid #ffb6c1;
+    border-radius: .2rem;
     cursor: pointer;
 }
 
@@ -28,34 +29,34 @@
     color: transparent;
 }
 #peca1{
-    background-image: url('./imagens/arthur/1.jpg');
+    background-image: url('./imagens/lider/1.jpg');
     background-size: cover;
 }
 #peca2{
-    background-image: url('./imagens/arthur/2.jpg');
+    background-image: url('./imagens/lider/2.jpg');
     background-size: cover;
 }
 #peca3{
-    background-image: url('./imagens/arthur/3.jpg');
+    background-image: url('./imagens/lider/3.jpg');
     background-size: cover;
 }
 #peca4{
-    background-image: url('./imagens/arthur/4.jpg');
+    background-image: url('./imagens/lider/4.jpg');
     background-size: cover;
 }
 #peca5{
-    background-image: url('./imagens/arthur/5.jpg');
+    background-image: url('./imagens/lider/5.jpg');
     background-size: cover;
 }
 #peca6{
-    background-image: url('./imagens/arthur/6.jpg');
+    background-image: url('./imagens/lider/6.jpg');
     background-size: cover;
 }
 #peca7{
-    background-image: url('./imagens/arthur/7.jpg');
+    background-image: url('./imagens/lider/7.jpg');
     background-size: cover;
 }
 #peca8{
-    background-image: url('./imagens/arthur/8.jpg');
-    background-size: cover;
+    background-image: url('./imagens/lider/8.jpg');
+    background-size: cover;
 }

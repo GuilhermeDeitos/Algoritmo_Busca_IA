@@ -1,4 +1,16 @@
 button{
-    padding: 0 5px 0 5px;
+    padding: .3rem .6rem;
     margin: 15px 5px 0 5px;
+    background-color: #c98ebc;
+    color: #fff;
+    border:1px solid transparent;
+    border-radius: .5rem;
+    cursor: pointer;
+    transition: .5s ease-in-out;
+}
+
+button:hover{
+    background-color: transparent;
+    color: #c98ebc;
+    border: 1px solid #c98ebc;
 }

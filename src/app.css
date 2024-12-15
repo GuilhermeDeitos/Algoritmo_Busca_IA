@@ -5,3 +5,32 @@
     justify-content: center;
     text-align: center;
 }
+
+nav{
+}
+
+nav ul{
+    list-style: none;
+    display: flex;
+    gap: .5rem;
+    
+
+}
+
+nav ul li a{
+    padding: .2rem .5rem;
+    text-decoration: none;
+    color: #000;
+    border-radius: .3rem;
+    border: 1px solid transparent;
+    cursor:pointer;
+    transition: .3s linear;
+    background-color: #fec8d8;
+}
+
+nav ul li a:hover{
+    background-color: transparent;
+    color: #000;
+    border-color: #fec8d8;
+
+}
