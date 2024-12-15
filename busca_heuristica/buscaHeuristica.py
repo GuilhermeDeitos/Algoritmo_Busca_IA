@@ -78,7 +78,7 @@ def a_estrela(tabuleiro_inicial):
                 visitados.add(vizinho.para_tupla())
                 heapq.heappush(fila_prioridade, vizinho)
     
-    return None  # Retorna None se não encontrar solução (não deveria acontecer para puzzles resolvíveis)
+    return []  # Retorna None se não encontrar solução (não deveria acontecer para puzzles resolvíveis)
 
 def reconstruir_caminho(estado):
     # Reconstrói o caminho de movimentos a partir do estado final
