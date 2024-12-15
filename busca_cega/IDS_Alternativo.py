@@ -1,6 +1,8 @@
+# Versão alternativa do IDS, com uma lista de nodes visitados para acelerar a busca, em troca de um maior uso de memória
+
 import numpy as np
 from math import sqrt
-import threading
+import threading, time
 
 lado = 0
 
@@ -61,7 +63,7 @@ def gerar_estado_inicial(ladol):
     return ESTADO_INICIAL
 
 
-def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem):
+def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, visitados):
     '''
     Função Busca em Profundidade Iterativa (IDS):
     
@@ -75,15 +77,35 @@ def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, o
                 Se retorno == False, é um caminho sem fim.
                 Se retorno == True,  é o node destino!
     '''
+    #time.sleep(1)
+    # Primeiro, convertemos o estado atual para uma tupla (a lista de visitados é um set, logo temos que converter ele pra uma tupla, pois tuplas são hasháveis)
+    estado_atual_tupla = tuple(map(tuple, estado_atual))
+    
+    #print("EA eh")
+    #print(estado_atual)
+    #print("Visitados eh")
+    #print(visitados)
+    #print("Profundidade eh", profundidade_limite)
+    
+    if estado_atual_tupla in visitados: # Se o estado atual já foi visitado, retornamos falso.
+        #print("EA in Visitados!")
+        return False
+    
+    visitados.add(estado_atual_tupla)   # Colocamos o estado atual na lista de visitados
+    
     
     # Compara o estado atual com o objetivo e localiza a posição do zero.
     flag_diferente, zero_i, zero_j = comparar_matrizes(estado_atual, ESTADO_OBJETIVO)
+    global nos_visitados
+    nos_visitados += 1
     
     if not flag_diferente:
+        #print("Flag Diferente")
         # Se o estado atual for o objetivo, retornamos o caminho percorrido até ele.
         return [estado_atual]
     
     if profundidade_limite == 0:
+        #print("Prof Limite")
         # Caso o limite de profundidade seja alcançado, retornamos False indicando um caminho sem sucesso.
         return False
 
@@ -116,7 +138,8 @@ def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, o
                 )
                 
                 # Chamada recursiva para explorar o próximo estado.
-                retorno = profundidade_iterativa(proximo_estado, ESTADO_OBJETIVO, profundidade_limite - 1, (zero_i, zero_j))
+                #print("Indo pro proximo!")
+                retorno = profundidade_iterativa(proximo_estado, ESTADO_OBJETIVO, profundidade_limite - 1, visitados)
                 
                 if retorno:
                     # Se a solução for encontrada, adiciona o estado atual ao caminho e retorna.
@@ -131,10 +154,12 @@ def profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, o
 
 def profundidade(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem):
     global nos_gerados, nos_visitados
+    nos_gerados, nos_visitados = 0, 0
     #profundidade_limite += 1
     while(True):
+        visitados = set()
         profundidade_limite += 1
-        retorno = profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, origem)
+        retorno = profundidade_iterativa(estado_atual, ESTADO_OBJETIVO, profundidade_limite, visitados)
         print(profundidade_limite)
         
         if retorno:         # Encontrado o caminho de saída
@@ -167,10 +192,11 @@ def profundidade_timeOut(funcao, args, tempo_limite):
 def print_caminho_final(caminho_final):
     i = 0
     print("\n\n Caminho Final:")
-    for matriz in caminho_final:
+    for matriz, trocado in caminho_final:
         print("=+=---===--==--===---=+=")
+        print(f"Matriz {i}:")
         print(matriz)
-
+        print(f"Elemento trocado: {trocado}")
         
 
 def eh_resolvivel(tabuleiro):
@@ -189,21 +215,21 @@ if __name__ == '__main__':
     nos_gerados = nos_visitados = 0
     lado = ESTADO_OBJETIVO.size
     lado = int(sqrt(lado)) 
-    ESTADO_INICIAL = np.array([[2, 3, 6],
-                               [1, 7, 5],
-                               [4, 0, 8]])
+    ESTADO_INICIAL = np.array([[1, 2, 7],
+                               [6, 4, 8],
+                               [3, 0, 5]])
     
     if(eh_resolvivel(ESTADO_INICIAL)):
         print("RESOLVIVEL!")
         caminho_final = profundidade(ESTADO_INICIAL, ESTADO_OBJETIVO, -1, (0, 0))
 
-        print_caminho_final(caminho_final)
+        #print_caminho_final(caminho_final)
 
         print("=--------------=")
         #caminho_final = [tup[0].tolist() for tup in caminho_final]
 
             
-        #print(caminho_final)
+        print(caminho_final)
             
     else:
         print("Não resolvivel!")
