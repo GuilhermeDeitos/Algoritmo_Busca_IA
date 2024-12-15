@@ -12,7 +12,6 @@ class EstadoQuebraCabeca:
         self.anterior = anterior
         self.posicao_vazia = self.encontrar_posicao_vazia()
         self.prioridade = self.movimentos + self.calcular_distancia_manhattan()
-        #print(f"tabuleiro: {tabuleiro}")
 
     # Encontra a posição do espaço vazio (0) no tabuleiro
     def encontrar_posicao_vazia(self):
@@ -60,24 +59,32 @@ class EstadoQuebraCabeca:
 def a_estrela(tabuleiro_inicial):
     # Função A* para resolver o quebra-cabeça
     estado_inicial = EstadoQuebraCabeca(tabuleiro_inicial)
-    #print(f"estado inicial: {tabuleiro_inicial}")
     fila_prioridade = []
     heapq.heappush(fila_prioridade, estado_inicial)
     visitados = set()
     visitados.add(estado_inicial.para_tupla())
 
+    nos_gerados = 0  # Contador de nós gerados
+    nos_visitados = 0  # Contador de nós visitados
+
     while fila_prioridade:
         estado_atual = heapq.heappop(fila_prioridade)
+        nos_visitados += 1
 
         if estado_atual.tabuleiro == ESTADO_OBJETIVO:
             # Solução encontrada, reconstrói o caminho de solução
+            print(f"Nós gerados: {nos_gerados}")
+            print(f"Nós visitados: {nos_visitados}")
             return reconstruir_caminho(estado_atual)
 
         for vizinho in estado_atual.gerar_vizinhos():
+            nos_gerados += 1
             if vizinho.para_tupla() not in visitados:
                 visitados.add(vizinho.para_tupla())
                 heapq.heappush(fila_prioridade, vizinho)
-    
+
+    print(f"Nós gerados: {nos_gerados}")
+    print(f"Nós visitados: {nos_visitados}")
     return None  # Retorna None se não encontrar solução (não deveria acontecer para puzzles resolvíveis)
 
 def reconstruir_caminho(estado):
@@ -109,9 +116,9 @@ def eh_resolvivel(tabuleiro):
 # ]
 
 tabuleiro_inicial = [
-    [7, 6, 5],
-    [4, 8, 1],
-    [3, 2, 0]
+    [2, 3, 6],
+    [1, 5, 8],
+    [4, 7, 0]
 ]
 
 if eh_resolvivel(tabuleiro_inicial):
@@ -119,15 +126,13 @@ if eh_resolvivel(tabuleiro_inicial):
     caminho_solucao = a_estrela(tabuleiro_inicial)
 
     # Imprime cada etapa da solução
-    if caminho_solucao:
-        for passo, tabuleiro in enumerate(caminho_solucao):
-            print(f"Passo {passo}:")
-            for linha in tabuleiro:
-                print(linha)
-            print()
-        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        print(caminho_solucao)
-    else:
-        print("Nenhuma solução encontrada.")
+    #if caminho_solucao:
+    #    for passo, tabuleiro in enumerate(caminho_solucao):
+    #        #print(f"Passo {passo}:")
+    #        for linha in tabuleiro:
+    #            #print(linha)
+    #        #print()
+    #else:
+    print("Nenhuma solução encontrada.")
 else:
     print("O tabuleiro inicial não é resolvível.")

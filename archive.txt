@@ -96,3 +96,81 @@ Matriz: [[2 1 7]
 Tempo total: 0
 Memória utilizada: 0
 
+Método: BUSCA HEURISTICA
+Resultado: falha!
+Matriz: [[6, 2, 8], [5, 4, 7], [3, 1, 0]]
+Tempo total: 21.684890031814575
+Memória utilizada: 423.7158203125
+
+Método: BUSCA HEURISTICA
+Resultado: falha!
+Matriz: [[3, 5, 2], [7, 6, 0], [8, 1, 4]]
+Tempo total: 25.282729387283325
+Memória utilizada: 580.560546875
+
+Método: BUSCA HEURISTICA
+Resultado: exito!
+Matriz: [[3, 1, 5], [8, 0, 6], [4, 7, 2]]
+Tempo total: 0.08477592468261719
+Memória utilizada: 204.671875
+
+Método: BUSCA HEURISTICA
+Resultado: falha!
+Matriz: [[7, 5, 6], [3, 2, 0], [8, 1, 4]]
+Tempo total: 28.250285387039185
+Memória utilizada: 600.0419921875
+
+Método: BUSCA HEURISTICA
+Resultado: falha!
+Matriz: [[0, 2, 6], [1, 5, 4], [3, 8, 7]]
+Tempo total: 31.630117177963257
+Memória utilizada: 618.9404296875
+
+Método: BUSCA HEURISTICA
+Resultado: falha!
+Matriz: [[4, 3, 2], [7, 6, 5], [8, 0, 1]]
+Tempo total: 30.63763189315796
+Memória utilizada: 623.4189453125
+
+Método: BUSCA HEURISTICA
+Resultado: falha!
+Matriz: [[7, 2, 1], [8, 0, 3], [5, 6, 4]]
+Tempo total: 25.779564380645752
+Memória utilizada: 585.21484375
+
+Método: BUSCA HEURISTICA
+Resultado: exito!
+Matriz: [[0, 4, 2], [5, 8, 3], [6, 1, 7]]
+Tempo total: 0.08330774307250977
+Memória utilizada: 87.390625
+
+Método: BUSCA HEURISTICA
+Resultado: exito!
+Matriz: [[5, 4, 8], [1, 3, 7], [6, 2, 0]]
+Tempo total: 0.5607185363769531
+Memória utilizada: 236.6171875
+
+Método: BUSCA HEURISTICA
+Resultado: exito!
+Matriz: [[0, 7, 2], [4, 1, 5], [6, 8, 3]]
+Tempo total: 0.11637568473815918
+Memória utilizada: 195.453125
+
+Método: BUSCA HEURISTICA
+Resultado: exito!
+Matriz: [[7, 4, 0], [2, 6, 5], [8, 3, 1]]
+Tempo total: 0.07123208045959473
+Memória utilizada: 56.234375
+
+Método: BUSCA HEURISTICA
+Resultado: exito!
+Matriz: [[7, 1, 5], [8, 0, 4], [2, 6, 3]]
+Tempo total: 0.09687399864196777
+Memória utilizada: 193.734375
+
+Método: BUSCA HEURISTICA
+Resultado: exito!
+Matriz: [[1, 3, 8], [5, 0, 6], [2, 4, 7]]
+Tempo total: 0.02361893653869629
+Memória utilizada: 107.4462890625
+

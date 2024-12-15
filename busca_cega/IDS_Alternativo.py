@@ -215,9 +215,9 @@ if __name__ == '__main__':
     nos_gerados = nos_visitados = 0
     lado = ESTADO_OBJETIVO.size
     lado = int(sqrt(lado)) 
-    ESTADO_INICIAL = np.array([[1, 2, 7],
-                               [6, 4, 8],
-                               [3, 0, 5]])
+    ESTADO_INICIAL = np.array([[1, 2, 3],
+                               [4, 0, 5],
+                               [7, 8, 6]])
     
     if(eh_resolvivel(ESTADO_INICIAL)):
         print("RESOLVIVEL!")
